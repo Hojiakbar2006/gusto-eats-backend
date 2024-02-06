@@ -7,9 +7,9 @@ router = DefaultRouter()
 router.register(r'products', products.ProductViewSet)
 router.register(r'categories', products.CategoryViewSet)
 router.register(r'orders', OrderViewSet)
-router.register(r'feedback', products.FeedbackViewSet)
 
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('feedback/', products.FeedbackAPIView.as_view())
 ]

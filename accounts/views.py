@@ -26,7 +26,7 @@ def get_users_staff(request):
     users = get_user_model().objects.filter(is_staff=True)
     if not users:
         return Response({'message': 'No staff users'})
-    serializer = UserProfileSerializer(users, many=True)
+    serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
 

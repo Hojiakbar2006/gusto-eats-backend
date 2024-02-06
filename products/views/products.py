@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import viewsets
 from products.models import Product, Review, Category, Feedback
 from rest_framework.decorators import action
@@ -83,7 +84,22 @@ class CategoryViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAdminOrReadOnly]
 
 
-class FeedbackViewSet(viewsets.ModelViewSet):
-    queryset = Feedback.objects.all()
-    serializer_class = FeedbackSerializer
-    # permission_classes = [IsAdminOrReadOnly]
+class FeedbackAPIView(APIView):
+    permission_classes = []
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAdminUser()]
+        return super().get_permissions()
+
+    def get(self, request):
+        feedback_objects = Feedback.objects.all()
+        serializer = FeedbackSerializer(feedback_objects, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = FeedbackSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
