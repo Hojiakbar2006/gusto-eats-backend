@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Category(models.Model):
@@ -18,13 +19,13 @@ class Product(models.Model):
         Category, on_delete=models.CASCADE, max_length=50, null=False, blank=False)
     type = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    rating = models.DecimalField(
-        max_length=1,
-        max_digits=5, decimal_places=0, blank=True, default=0)
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)], blank=True, default=0
+    )
     numReviews = models.IntegerField(null=True, blank=True, default=0)
-    price = models.IntegerField(null=True, blank=True, default=0)
-    discount = models.IntegerField(default=0,)
-    countInStock = models.IntegerField(null=True, blank=True, default=0)
+    price = models.SmallIntegerField(null=True, blank=True, default=0)
+    discount = models.SmallIntegerField(default=0,)
+    countInStock = models.SmallIntegerField(null=True, blank=True, default=0)
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

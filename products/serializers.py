@@ -17,6 +17,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)
+    # category = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Product
@@ -29,6 +30,10 @@ class ProductSerializer(serializers.ModelSerializer):
         obj.numReviews = num_reviews
         obj.save()
         return serializer.data
+
+    # def get_category(self, obj):
+    #     category_name = obj.category.name
+    #     return category_name
 
 
 class ShippingAddressSerializer(serializers.ModelSerializer):
