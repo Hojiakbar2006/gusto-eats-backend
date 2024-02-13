@@ -122,6 +122,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN")
+ADMINS_ID = env("ADMINS_ID").split(",")
 
 STATIC_URL = 'static/'
 

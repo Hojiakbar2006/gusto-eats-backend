@@ -1,4 +1,3 @@
-from accounts.models import User
 from config import settings
 from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
