@@ -73,7 +73,7 @@ class Review(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     paymentMethod = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     phone_number = models.CharField(
@@ -100,7 +100,7 @@ class Order(models.Model):
     #     super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self,  str(self.createdAt)}"
+        return f"{self.name} {" "} {self.phone_number}"
 
     class Meta:
         ordering = ['-createdAt']
@@ -108,7 +108,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=200, null=True, blank=True)
     qty = models.IntegerField(null=True, blank=True, default=0)
     price = models.IntegerField(

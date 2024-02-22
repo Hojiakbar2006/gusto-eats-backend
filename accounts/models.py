@@ -56,3 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
             self.save()
             return True
         return False
+
+
+class ChatId(models.Model):
+    chat_id = models.SmallIntegerField()

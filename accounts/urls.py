@@ -1,8 +1,14 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from .views import *
 from rest_framework_simplejwt.views import TokenRefreshView
 
+router = DefaultRouter()
+router.register(r'chat_id', ChatIdViewSet,  basename='chat_id')
+
+
 urlpatterns = [
+    path('', include(router.urls)),
     path("login/", login_user, name="login"),
     path("register/", register_user, name="register"),
     path("profile/", get_user_profile, name="get_user_profile"),

@@ -3,10 +3,17 @@ from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from rest_framework import status
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import *
 from .serializers import *
+
+
+class ChatIdViewSet(ModelViewSet):
+    # permission_classes = [IsAdminUser]
+    queryset = ChatId.objects.all()
+    serializer_class = ChatIdSerializer
 
 
 @api_view(['GET'])

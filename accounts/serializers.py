@@ -1,8 +1,14 @@
-from .models import User
+from .models import User, ChatId
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+
+
+class ChatIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatId
+        fields = ("chat_id",)
 
 
 class UserSerializer(serializers.ModelSerializer):
