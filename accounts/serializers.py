@@ -6,9 +6,14 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 
 class ChatIdSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = ChatId
-        fields = ("chat_id",)
+        fields = ("name", "chat_id")
+
+    def get_name(self, obj):
+        return obj.first_name
 
 
 class UserSerializer(serializers.ModelSerializer):

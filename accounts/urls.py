@@ -20,4 +20,9 @@ urlpatterns = [
     # //for admins
     path("users/", get_users, name="get_users"),
     path("users_staff/", get_users_staff, name="get_users_staff"),
+
+    path('chat_ids/', list_chat_ids, name='list_chat_ids'),
+    path('create_chat_id/', create_chat_id, name='create_chat_id'),
+    path('chat_id/<int:user_id>/',
+         delete_chat_id, name='delete_chat_ids'),
 ]

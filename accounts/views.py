@@ -143,3 +143,34 @@ def logout_user(request):
     serializer.save()
 
     return Response({"message": "Muvafaqiyatli chiqish"}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def create_chat_id(request):
+    serializer = ChatIdSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def list_chat_ids(request):
+    chat_ids = ChatId.objects.all()
+    serializer = ChatIdSerializer(chat_ids, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def delete_chat_id(request, user_id):
+    try:
+        chat_ids = ChatId.objects.filter(user_id=user_id)
+        if not chat_ids.exists():
+            return Response("Chat IDs not found for the user", status=status.HTTP_404_NOT_FOUND)
+
+        chat_ids.delete()
+        return Response("Chat IDs deleted successfully", status=status.HTTP_204_NO_CONTENT)
+    except Exception as e:
+        return Response(f"An error occurred: {str(e)}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)

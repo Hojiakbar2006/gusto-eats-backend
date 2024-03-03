@@ -1,6 +1,7 @@
+from django.utils.text import slugify
 from rest_framework.response import Response
 from accounts.models import User
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework import status
 from rest_framework.views import APIView
 from products.models import Feedback, Order, Category, Product, OrderItem
@@ -9,7 +10,7 @@ from products.serializers import FeedbackSerializer
 
 
 class FeedbackAPIView(APIView):
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -48,4 +49,8 @@ class AdminStatsView(APIView):
             {'entity': 'Staff User', 'count': staff_user_count},
             {'entity': 'Customer User', 'count': customer_user_count},
         ]
+
+        for item in data:
+            item['route_path'] = slugify(item['entity'])
+
         return Response(data)

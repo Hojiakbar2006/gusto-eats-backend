@@ -18,7 +18,8 @@ from django.conf import settings
 
 def send_telegram_message(message):
     chat_ids = ChatId.objects.values_list('chat_id', flat=True)
-    print(chat_ids)
+    if not chat_ids:
+        return
     for chat_id in chat_ids:
         requests.post(
             f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage?chat_id={chat_id}&text={message}")
@@ -79,10 +80,12 @@ def add_order_items(request):
         order_details += f"Product ID: {order_item.product.id} \nProduct Name: {
             order_item.product.name} \nQuantity: {order_item.qty}\n\n"
     order_details += f"Total Price: {order.totalPrice}"
-    send_telegram_message(order_details)
 
-    serializer = OrderSerializer(order)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    try:
+        send_telegram_message(order_details)
+    except Exception as e:
+        return Response({"detail": "Something went wrong"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return Response({"message": "Order added  succeccfully"}, status=status.HTTP_201_CREATED)
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>ADD ORDER
 
